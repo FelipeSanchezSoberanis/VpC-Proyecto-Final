@@ -7,7 +7,7 @@ from pyfirmata import Arduino
 
 cap = cv2.VideoCapture(0)  # Checks for camera
 arduino = Arduino("COM3")
-output = arduino.get_pin('d:6:p')
+output = arduino.get_pin("d:6:p")
 
 mpHands = mp.solutions.hands  # detects hand/finger
 hands = mpHands.Hands()  # complete the initialization configuration of hands
@@ -30,7 +30,7 @@ while True:
             for id, lm in enumerate(handlandmark.landmark):
                 # Get finger joint points
                 h, w, _ = img.shape
-                cx, cy = int(lm.x*w), int(lm.y*h)
+                cx, cy = int(lm.x * w), int(lm.y * h)
                 # adding to the empty list 'lmList'
                 lmList.append([id, cx, cy])
             mpDraw.draw_landmarks(img, handlandmark, mpHands.HAND_CONNECTIONS)
@@ -48,8 +48,8 @@ while True:
         # create a line b/w tips of index finger and thumb
         cv2.line(img, (x1, y1), (x2, y2), (255, 0, 0), 3)
 
-        length = hypot(x2-x1, y2-y1)  # distance b/w tips using hypotenuse
- # from numpy we find our length,by converting hand range in terms of volume range ie b/w -63.5 to 0
+        length = hypot(x2 - x1, y2 - y1)  # distance b/w tips using hypotenuse
+        # from numpy we find our length,by converting hand range in terms of volume range ie b/w -63.5 to 0
         # vol = np.interp(length, [100, 350], [volMin, volMax])
         volbar = np.interp(length, [30, 350], [400, 150])
         volper = np.interp(length, [30, 350], [0, 100])
@@ -62,16 +62,16 @@ while True:
         # creating volume bar for volume level
         # vid ,initial position ,ending position ,rgb ,thickness
         cv2.rectangle(img, (50, 150), (85, 400), (0, 0, 255), 4)
-        cv2.rectangle(img, (50, int(volbar)), (85, 400),
-                      (0, 0, 255), cv2.FILLED)
-        cv2.putText(img, f"{int(volper)}%", (10, 40),
-                    cv2.FONT_ITALIC, 1, (0, 255, 98), 3)
+        cv2.rectangle(img, (50, int(volbar)), (85, 400), (0, 0, 255), cv2.FILLED)
+        cv2.putText(
+            img, f"{int(volper)}%", (10, 40), cv2.FONT_ITALIC, 1, (0, 255, 98), 3
+        )
         salida = (400 - volbar) / (256 * 30)
         print(salida)
         output.write(salida)
         # tell the volume percentage ,location,font of text,length,rgb color,thickness
-    cv2.imshow('Image', img)  # Show the video
-    if cv2.waitKey(1) & 0xff == ord(' '):  # By using spacebar delay will stop
+    cv2.imshow("Image", img)  # Show the video
+    if cv2.waitKey(1) & 0xFF == ord(" "):  # By using spacebar delay will stop
         break
 
 cap.release()  # stop cam
