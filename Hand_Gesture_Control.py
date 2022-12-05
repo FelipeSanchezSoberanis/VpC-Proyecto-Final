@@ -1,10 +1,8 @@
 import cv2
 import mediapipe as mp
 from math import hypot
-from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL
 import numpy as np
-from pyfirmata import Arduino, util
+from pyfirmata import Arduino
 
 
 cap = cv2.VideoCapture(0)  # Checks for camera
